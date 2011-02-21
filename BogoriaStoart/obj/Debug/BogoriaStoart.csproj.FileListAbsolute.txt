@@ -1,0 +1,10 @@
+D:\Bogoria-STOART\BogoriaStoart\bin\Debug\BogoriaStoart.exe
+D:\Bogoria-STOART\BogoriaStoart\bin\Debug\BogoriaStoart.pdb
+D:\Bogoria-STOART\BogoriaStoart\obj\Debug\ResolveAssemblyReference.cache
+D:\Bogoria-STOART\BogoriaStoart\obj\Debug\BogoriaStoart.Form1.resources
+D:\Bogoria-STOART\BogoriaStoart\obj\Debug\BogoriaStoart.Properties.Resources.resources
+D:\Bogoria-STOART\BogoriaStoart\obj\Debug\ResGen.read.1.tlog
+D:\Bogoria-STOART\BogoriaStoart\obj\Debug\ResGen.write.1.tlog
+D:\Bogoria-STOART\BogoriaStoart\obj\Debug\BogoriaStoart.exe
+D:\Bogoria-STOART\BogoriaStoart\obj\Debug\BogoriaStoart.pdb
+D:\Bogoria-STOART\BogoriaStoart\obj\Debug\BogoriaStoart.czy_folder.resources

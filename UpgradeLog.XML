@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="BogoriaStoart">
+</Property><Property Name="Solution File" Value="D:\Bogoria-STOART\BogoriaStoart.sln">
+</Property><Property Name="Date" Value="21 lutego 2011">
+</Property><Property Name="Time" Value="12:05">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="BogoriaStoart.sln" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart.sln">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\BogoriaStoart.csproj" Description="Project file successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\BogoriaStoart.csproj">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Form1.cs" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Form1.cs">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Form1.Designer.cs" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Form1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Program.cs" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Program.cs">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Properties\AssemblyInfo.cs" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Properties\Resources.Designer.cs" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Properties\Settings.Designer.cs" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Properties\Settings.settings" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Form1.resx" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Form1.resx">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\Properties\Resources.resx" Description="File successfully backed up as D:\Bogoria-STOART\Backup\BogoriaStoart\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\BogoriaStoart.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="BogoriaStoart" Source="BogoriaStoart\BogoriaStoart.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="BogoriaStoart.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="BogoriaStoart.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="BogoriaStoart" Source="BogoriaStoart\BogoriaStoart.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
