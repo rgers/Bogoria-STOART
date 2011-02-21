@@ -35,7 +35,7 @@ namespace BogoriaStoart
             while (a < arej.Count)
             {
                 Song song1=(Song)arej[a];
-                if (song1.utwor == piosnka.utwor & song1.wykonawca == piosnka.wykonawca)
+                if (song1.utwor.ToLower() == piosnka.utwor.ToLower() & song1.wykonawca.ToLower() == piosnka.wykonawca.ToLower())
                 {
                     return a;
                 }
@@ -51,7 +51,7 @@ namespace BogoriaStoart
             while (a < arej.Count)
             {
                 
-                if (arej[a].ToString()==dir)
+                if (arej[a].ToString().ToLower()==dir.ToLower())
                 {
                     return a;
                 }
@@ -109,7 +109,7 @@ namespace BogoriaStoart
             bool muzyczny;
             while (files.Count > 0)
             {
-                StreamReader czytnik = new StreamReader((string)files[0]);
+                StreamReader czytnik = new StreamReader((string)files[0], Encoding.GetEncoding(1250));
                 while (czytnik.EndOfStream == false)
                 {
                     string linia = czytnik.ReadLine();
