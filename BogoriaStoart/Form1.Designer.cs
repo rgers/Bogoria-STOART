@@ -36,6 +36,7 @@
             this.btn_del2 = new System.Windows.Forms.Button();
             this.lst_files = new System.Windows.Forms.ListBox();
             this.btn_delfiles = new System.Windows.Forms.Button();
+            this.btn_saveout = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_start
@@ -118,11 +119,22 @@
             this.btn_delfiles.UseVisualStyleBackColor = true;
             this.btn_delfiles.Click += new System.EventHandler(this.btn_delfiles_Click);
             // 
+            // btn_saveout
+            // 
+            this.btn_saveout.Location = new System.Drawing.Point(382, 258);
+            this.btn_saveout.Name = "btn_saveout";
+            this.btn_saveout.Size = new System.Drawing.Size(75, 23);
+            this.btn_saveout.TabIndex = 8;
+            this.btn_saveout.Text = "Save Output";
+            this.btn_saveout.UseVisualStyleBackColor = true;
+            this.btn_saveout.Click += new System.EventHandler(this.btn_saveout_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(843, 306);
+            this.Controls.Add(this.btn_saveout);
             this.Controls.Add(this.btn_delfiles);
             this.Controls.Add(this.lst_files);
             this.Controls.Add(this.btn_del2);
@@ -147,6 +159,7 @@
         private System.Windows.Forms.Button btn_del2;
         private System.Windows.Forms.ListBox lst_files;
         private System.Windows.Forms.Button btn_delfiles;
+        private System.Windows.Forms.Button btn_saveout;
     }
 }
 

@@ -39,6 +39,7 @@ namespace BogoriaStoart
                 {
                     return a;
                 }
+                a++;
             }
 
             return (-1);
@@ -63,15 +64,41 @@ namespace BogoriaStoart
         string find_directory_from_path(string path)
         {
             string directory;
-            directory = path.Substring(0, path.LastIndexOf('\\'));
+            if (path.LastIndexOf('\\') > 1)
+            {
+                directory = path.Substring(0, path.LastIndexOf('\\'));
+            }
+            else { directory = "error"; }
             return directory;
         }
 
         string find_file_from_path(string path)
         {
             string file;
-            file = path.Substring(path.LastIndexOf('\\')+1, path.Length-path.LastIndexOf('\\')-1);
+            if (path.LastIndexOf('\\') > 1)
+            {
+                file = path.Substring(path.LastIndexOf('\\') + 1, path.Length - path.LastIndexOf('\\') - 1);
+            }
+            else { file = "error"; }
             return file;
+        }
+
+        string[] find_data_from_filename(string path)
+        {
+            string filename = path.Substring(path.LastIndexOf('\\')+1, path.Length - path.LastIndexOf('\\') - 5);
+            string[] helper = filename.Split('-');
+            if (helper.Length > 1)
+            {
+                helper[0] = helper[0].Trim();
+                helper[1] = helper[1].Trim();
+                string[] dane = { " ", path, " ", helper[1], " ", helper[0] };
+                return dane;
+            }
+            else
+            {
+                string[] dane = { " " };
+                return dane;
+            }
         }
 
         private void btn_start_Click(object sender, EventArgs e)
@@ -87,35 +114,49 @@ namespace BogoriaStoart
                 {
                     string linia = czytnik.ReadLine();
                     string[] dane = linia.Split(';');
-
-                    if (find_if_exists(folderyMuzyczne, dane[0]) == (-1))
+                    if (dane.Length > 3)
                     {
-                        if (find_if_exists(folderyNiemuzyczne, dane[0]) == (-1))
+                        if (find_if_exists(folderyMuzyczne, find_directory_from_path(dane[1])) == (-1))
                         {
-                            czy_folder test = new czy_folder(dane[0]);
-                            test.ShowDialog();
-                            if (test.muzyczny)
-                            { folderyMuzyczne.Add(dane[0]); lst_muzyczne.Items.Add(dane[0]); muzyczny = true; }
-                            else { folderyNiemuzyczne.Add(dane[0]); lst_nmuzyczne.Items.Add(dane[0]); muzyczny = false; }
+                            if (find_if_exists(folderyNiemuzyczne, find_directory_from_path(dane[1])) == (-1))
+                            {
+                                czy_folder test = new czy_folder(find_directory_from_path(dane[1]));
+                                test.ShowDialog();
+                                if (test.muzyczny)
+                                { folderyMuzyczne.Add(find_directory_from_path(dane[1])); lst_muzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = true; }
+                                else { folderyNiemuzyczne.Add(find_directory_from_path(dane[1])); lst_nmuzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = false; }
+                            }
+                            else { muzyczny = false; }
                         }
-                        else { muzyczny = false; }
-                    }
-                    else { muzyczny = true; }
+                        else { muzyczny = true; }
 
-                    if (muzyczny)
-                    {
-                        Song piosenka = new Song(dane[0], dane[1], dane[2]);
-
-                        int numer = find_if_exists(utworyGrane, piosenka);
-                        if (numer < 0)
+                        if (muzyczny)
                         {
-                            utworyGrane.Add(piosenka);
+                            if (dane[5].Length < 2)
+                            {
+                                dane = find_data_from_filename(dane[1]);
+                                if (dane.Length < 2)
+                                { muzyczny = false; }
+                            }
                         }
-                        else
+
+
+                        if (muzyczny)
                         {
-                            piosenka = (Song)utworyGrane[numer];
-                            piosenka.nadania++;
-                            utworyGrane[numer] = piosenka;
+                            
+                            Song piosenka = new Song(dane[1], dane[5].Trim(), dane[3].Trim());
+
+                            int numer = find_if_exists(utworyGrane, piosenka);
+                            if (numer < 0)
+                            {
+                                utworyGrane.Add(piosenka);
+                            }
+                            else
+                            {
+                                piosenka = (Song)utworyGrane[numer];
+                                piosenka.nadania++;
+                                utworyGrane[numer] = piosenka;
+                            }
                         }
                     }
                 }
@@ -238,7 +279,28 @@ namespace BogoriaStoart
 
             }
         }
-    }
+
+        private void btn_saveout_Click(object sender, EventArgs e)
+        {
+            StreamWriter sw;
+            try
+            {
+                sw = new StreamWriter("wynik.csv");
+                int a = 0;
+                while (a < utworyGrane.Count)
+                {
+                    Song utwor = (Song)utworyGrane[a];
+                    sw.WriteLine(utwor.wykonawca + ";" + utwor.utwor + ";" + utwor.nadania.ToString());
+                    a++;
+                }
+                sw.Close();
+                sw.Dispose();
+            }
+            catch { }
+
+           
+        }
+    } //end class
 
     class Song
     {
