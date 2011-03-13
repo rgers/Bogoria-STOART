@@ -103,7 +103,7 @@ namespace BogoriaStoart
             }
         }
 
-        string try_to_fix_time(string time)
+        string[] try_to_fix_time(string time)
         {
             if (time.Length > 8)
             {
@@ -118,22 +118,26 @@ namespace BogoriaStoart
                         {
                             if (b == a + 3)
                             {
-                                time = time.Substring(a - 2, 8);
+                                time = time.Substring(a - 2, time.Length - a + 2);
                                 a = -1;
-                                return time;
+
+                                return time.Split(';');
                             }
+                            else { return null; }
                         }
+                        else { return null; }
                     }
+                    else { return null; }
                 }
-                return "error";
+                return null;
             }
 
-            return "error";
+            return null;
         }
 
         void find_time(string time)
         {
-            
+           
 
             if (last_index > -1 & time.Length==8)
             {
@@ -148,11 +152,46 @@ namespace BogoriaStoart
                         dt2 = dt2.AddDays(1);
                     }
                     long tiki = dt2.Ticks - dt1.Ticks;
-                    dtfinal = new DateTime(tiki);
-                    sngtemp.czas = dtfinal.Minute + ":" + dtfinal.Second;
-                    utworyGrane[last_index] = sngtemp;
+                    if (tiki > 0)
+                    {
+                        dtfinal = new DateTime(tiki);
+                        if (dtfinal.Second > 9)
+                        {
+                            sngtemp.czas = dtfinal.Minute + ":" + dtfinal.Second;
+                        }
+                        else
+                        {
+                            sngtemp.czas = dtfinal.Minute + ":" + "0" + dtfinal.Second;
+                        }
+                        utworyGrane[last_index] = sngtemp;
+                    }
+                    
                 }
             }
+        }
+
+        string find_taglib_path(string path, string czas)
+        {
+            string time = "";
+            try
+            {
+                TagLib.File pliktaglib = TagLib.File.Create(path);
+
+                long tiki = pliktaglib.Properties.Duration.Ticks;
+                DateTime dtfinal = new DateTime(tiki);
+                
+                if (dtfinal.Second > 9)
+                {
+                    time = dtfinal.Minute + ":" + dtfinal.Second;
+                }
+                else
+                {
+                    time = dtfinal.Minute + ":" + "0" + dtfinal.Second;
+                }
+                return time;
+            }
+            catch { }
+            return czas;
         }
 
         private void btn_start_Click(object sender, EventArgs e)
@@ -172,75 +211,84 @@ namespace BogoriaStoart
                     {
                         if (dane[0].Length > 8)
                         {
-                            dane[0] = try_to_fix_time(dane[0]);
-                        }
-                        find_time(dane[0]);
-                        if (find_if_exists(folderyMuzyczne, find_directory_from_path(dane[1])) == (-1))
-                        {
-                            if (find_if_exists(folderyNiemuzyczne, find_directory_from_path(dane[1])) == (-1))
-                            {
-                                czy_folder test = new czy_folder(find_directory_from_path(dane[1]));
-                                test.ShowDialog();
-                                if (test.muzyczny)
-                                { folderyMuzyczne.Add(find_directory_from_path(dane[1])); lst_muzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = true; }
-                                else { folderyNiemuzyczne.Add(find_directory_from_path(dane[1])); lst_nmuzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = false; }
-                            }
-                            else { muzyczny = false; }
-                        }
-                        else { muzyczny = true; }
-
-                        if (muzyczny)
-                        {
-                            if (dane[5].Length < 2)
-                            {
-                                dane = find_data_from_filename(dane);
-                                if (dane.Length < 2)
-                                { muzyczny = false; }
-                            }
-                        }
-
-
-                        if (muzyczny)
-                        {
-
-                            Song piosenka = new Song(dane[1], dane[5].Trim(), dane[3].Trim(), dane[0].Trim());
-
-                            if (piosenka.utwor == "Anything Goes")
-                            {
-                                bool test = true;
-                            }
-
-                            int numer = find_if_exists(utworyGrane, piosenka);
-                            if (numer < 0)
-                            {
-                                utworyGrane.Add(piosenka);
-                                last_index = utworyGrane.Count - 1;
-                            }
-                            else
-                            {
-                                piosenka = (Song)utworyGrane[numer];
-                                piosenka.nadania++;
-                                utworyGrane[numer] = piosenka;
-                                last_index = numer;
-                            }
+                            dane = try_to_fix_time(linia);
                         }
                     }
-                    else
+                    if (dane != null)
                     {
-                        if (dane.Length == 3)
+                        if (dane.Length > 3)
                         {
                             find_time(dane[0]);
-                            last_index = -1;
+                            if (find_if_exists(folderyMuzyczne, find_directory_from_path(dane[1])) == (-1))
+                            {
+                                if (find_if_exists(folderyNiemuzyczne, find_directory_from_path(dane[1])) == (-1))
+                                {
+                                    czy_folder test = new czy_folder(find_directory_from_path(dane[1]));
+                                    test.ShowDialog();
+                                    if (test.muzyczny)
+                                    { folderyMuzyczne.Add(find_directory_from_path(dane[1])); lst_muzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = true; }
+                                    else { folderyNiemuzyczne.Add(find_directory_from_path(dane[1])); lst_nmuzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = false; }
+                                }
+                                else { muzyczny = false; }
+                            }
+                            else { muzyczny = true; }
+
+                            if (muzyczny)
+                            {
+                                if (dane[5].Length < 2)
+                                {
+                                    dane = find_data_from_filename(dane);
+                                    if (dane.Length < 2)
+                                    { muzyczny = false; }
+                                }
+                            }
+
+
+                            if (muzyczny)
+                            {
+
+                                Song piosenka = new Song(dane[1], dane[5].Trim(), dane[3].Trim(), dane[0].Trim());
+
+                                if (piosenka.utwor == "Keep Holding On")
+                                {
+                                    bool test = true;
+                                }
+
+                                piosenka.czas = find_taglib_path(piosenka.file, piosenka.czas);
+
+                                int numer = find_if_exists(utworyGrane, piosenka);
+                                if (numer < 0)
+                                {
+                                    utworyGrane.Add(piosenka);
+                                    last_index = utworyGrane.Count - 1;
+                                }
+                                else
+                                {
+                                    piosenka = (Song)utworyGrane[numer];
+                                    piosenka.nadania++;
+                                    utworyGrane[numer] = piosenka;
+                                    last_index = numer;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (dane.Length < 4 & dane.Length > 0)
+                            {
+                                find_time(dane[0]);
+                                last_index = -1;
+                            }
                         }
                     }
+                    }
+                    files.RemoveAt(0);
+                    lst_files.Items.RemoveAt(0);
                 }
-                files.RemoveAt(0);
-                lst_files.Items.RemoveAt(0);
-            }
-            if (last_index != -1)
-            {
-                find_time("00:00:01");
-            }
+                if (last_index != -1)
+                {
+                    find_time("00:00:01");
+                }
+            
         }
 
         private void load_config()
@@ -375,7 +423,7 @@ namespace BogoriaStoart
                 sw.Dispose();
             }
             catch { }
-
+                        
            
         }
     } //end class
