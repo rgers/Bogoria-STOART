@@ -16,6 +16,7 @@ namespace BogoriaStoart
     public partial class Form1 : Form
     {
         ArrayList folderyMuzyczne, folderyNiemuzyczne, utworyGrane, files;
+        int last_index;
 
         public Form1()
         {
@@ -25,6 +26,7 @@ namespace BogoriaStoart
             folderyNiemuzyczne = new ArrayList();
             utworyGrane = new ArrayList();
             files = new ArrayList();
+            last_index = -1;
 
             load_config();
         }
@@ -83,21 +85,73 @@ namespace BogoriaStoart
             return file;
         }
 
-        string[] find_data_from_filename(string path)
+        string[] find_data_from_filename(string[] path)
         {
-            string filename = path.Substring(path.LastIndexOf('\\')+1, path.Length - path.LastIndexOf('\\') - 5);
+            string filename = path[1].Substring(path[1].LastIndexOf('\\')+1, path[1].Length - path[1].LastIndexOf('\\') - 5);
             string[] helper = filename.Split('-');
             if (helper.Length > 1)
             {
                 helper[0] = helper[0].Trim();
                 helper[1] = helper[1].Trim();
-                string[] dane = { " ", path, " ", helper[1], " ", helper[0] };
+                string[] dane = { path[0], path[1], " ", helper[1], " ", helper[0] };
                 return dane;
             }
             else
             {
                 string[] dane = { " " };
                 return dane;
+            }
+        }
+
+        string try_to_fix_time(string time)
+        {
+            if (time.Length > 8)
+            {
+                int a = 0;
+                while (a < time.Length - 2 & a != -1)
+                {
+                    a = time.IndexOf(':', a);
+                    if (a != -1)
+                    {
+                        int b = time.IndexOf(':', a + 1);
+                        if (b != -1)
+                        {
+                            if (b == a + 3)
+                            {
+                                time = time.Substring(a - 2, 8);
+                                a = -1;
+                                return time;
+                            }
+                        }
+                    }
+                }
+                return "error";
+            }
+
+            return "error";
+        }
+
+        void find_time(string time)
+        {
+            
+
+            if (last_index > -1 & time.Length==8)
+            {
+                DateTime dt1, dt2, dtfinal;
+                Song sngtemp = (Song)utworyGrane[last_index];
+                if (sngtemp.czas.Length == 8)
+                {
+                    dt1 = Convert.ToDateTime(sngtemp.czas);
+                    dt2 = Convert.ToDateTime(time.Trim());
+                    if (dt2.Hour < dt1.Hour)
+                    {
+                        dt2 = dt2.AddDays(1);
+                    }
+                    long tiki = dt2.Ticks - dt1.Ticks;
+                    dtfinal = new DateTime(tiki);
+                    sngtemp.czas = dtfinal.Minute + ":" + dtfinal.Second;
+                    utworyGrane[last_index] = sngtemp;
+                }
             }
         }
 
@@ -116,6 +170,11 @@ namespace BogoriaStoart
                     string[] dane = linia.Split(';');
                     if (dane.Length > 3)
                     {
+                        if (dane[0].Length > 8)
+                        {
+                            dane[0] = try_to_fix_time(dane[0]);
+                        }
+                        find_time(dane[0]);
                         if (find_if_exists(folderyMuzyczne, find_directory_from_path(dane[1])) == (-1))
                         {
                             if (find_if_exists(folderyNiemuzyczne, find_directory_from_path(dane[1])) == (-1))
@@ -134,7 +193,7 @@ namespace BogoriaStoart
                         {
                             if (dane[5].Length < 2)
                             {
-                                dane = find_data_from_filename(dane[1]);
+                                dane = find_data_from_filename(dane);
                                 if (dane.Length < 2)
                                 { muzyczny = false; }
                             }
@@ -143,25 +202,44 @@ namespace BogoriaStoart
 
                         if (muzyczny)
                         {
-                            
-                            Song piosenka = new Song(dane[1], dane[5].Trim(), dane[3].Trim());
+
+                            Song piosenka = new Song(dane[1], dane[5].Trim(), dane[3].Trim(), dane[0].Trim());
+
+                            if (piosenka.utwor == "Anything Goes")
+                            {
+                                bool test = true;
+                            }
 
                             int numer = find_if_exists(utworyGrane, piosenka);
                             if (numer < 0)
                             {
                                 utworyGrane.Add(piosenka);
+                                last_index = utworyGrane.Count - 1;
                             }
                             else
                             {
                                 piosenka = (Song)utworyGrane[numer];
                                 piosenka.nadania++;
                                 utworyGrane[numer] = piosenka;
+                                last_index = numer;
                             }
+                        }
+                    }
+                    else
+                    {
+                        if (dane.Length == 3)
+                        {
+                            find_time(dane[0]);
+                            last_index = -1;
                         }
                     }
                 }
                 files.RemoveAt(0);
                 lst_files.Items.RemoveAt(0);
+            }
+            if (last_index != -1)
+            {
+                find_time("00:00:01");
             }
         }
 
@@ -290,7 +368,7 @@ namespace BogoriaStoart
                 while (a < utworyGrane.Count)
                 {
                     Song utwor = (Song)utworyGrane[a];
-                    sw.WriteLine(utwor.wykonawca + ";" + utwor.utwor + ";" + utwor.nadania.ToString());
+                    sw.WriteLine(utwor.wykonawca + ";" + utwor.utwor + ";" + utwor.czas + ";" + utwor.nadania.ToString());
                     a++;
                 }
                 sw.Close();
@@ -307,13 +385,15 @@ namespace BogoriaStoart
         public string file;
         public string wykonawca;
         public string utwor;
+        public string czas;
         public int nadania;
 
-        public Song(string path, string performer, string title)
+        public Song(string path, string performer, string title, string time)
         {
             file = path;
             wykonawca = performer;
             utwor = title;
+            czas = time;
             nadania = 1;
         }
     }
