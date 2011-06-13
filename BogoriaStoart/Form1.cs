@@ -416,7 +416,7 @@ namespace BogoriaStoart
                 while (a < utworyGrane.Count)
                 {
                     Song utwor = (Song)utworyGrane[a];
-                    sw.WriteLine(utwor.wykonawca + ";" + utwor.utwor + ";" + utwor.czas + ";" + utwor.nadania.ToString());
+                    sw.WriteLine(utwor.wykonawca + ";" + utwor.utwor + ";" + utwor.czas + ";" + utwor.nadania.ToString() + ";" + utwor.file);
                     a++;
                 }
                 sw.Close();
@@ -435,6 +435,7 @@ namespace BogoriaStoart
         public string utwor;
         public string czas;
         public int nadania;
+        
 
         public Song(string path, string performer, string title, string time)
         {
