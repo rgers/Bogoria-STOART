@@ -37,7 +37,7 @@ namespace BogoriaStoart
             while (a < arej.Count)
             {
                 Song song1=(Song)arej[a];
-                if (song1.utwor.ToLower() == piosnka.utwor.ToLower() & song1.wykonawca.ToLower() == piosnka.wykonawca.ToLower())
+                if (song1.utwor.ToLower() == piosnka.utwor.ToLower() & song1.wykonawca.ToLower() == piosnka.wykonawca.ToLower() & song1.file == piosnka.file)      //check also path v2
                 {
                     return a;
                 }
