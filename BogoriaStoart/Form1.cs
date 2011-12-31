@@ -15,7 +15,7 @@ namespace BogoriaStoart
    
     public partial class Form1 : Form
     {
-        ArrayList folderyMuzyczne, folderyNiemuzyczne, utworyGrane, files, dontask;
+        ArrayList folderyMuzyczne, folderyNiemuzyczne, utworyGrane, files, dontask, dontaskmuz;
         int last_index;
 
         public Form1()
@@ -26,6 +26,8 @@ namespace BogoriaStoart
             folderyNiemuzyczne = new ArrayList();
             utworyGrane = new ArrayList();
             files = new ArrayList();
+            dontask = new ArrayList();
+            dontaskmuz = new ArrayList();
             last_index = -1;
 
             load_config();
@@ -239,15 +241,19 @@ namespace BogoriaStoart
                             {
                                 if (find_if_exists(folderyNiemuzyczne, find_directory_from_path(dane[1])) == (-1))
                                 {
-                                    if (find_if_contains(dontask, find_directory_from_path(dane[1])) == (-1))
+                                    if (find_if_contains(dontask, dane[1]) == (-1))
                                     {
+                                        if (find_if_contains(dontaskmuz, dane[1]) == (-1))
+                                        {
+                                            czy_folder test = new czy_folder(find_directory_from_path(dane[1]));
+                                            test.ShowDialog();
+                                            if (test.muzyczny)
+                                            { folderyMuzyczne.Add(find_directory_from_path(dane[1])); lst_muzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = true; }
+                                            else { folderyNiemuzyczne.Add(find_directory_from_path(dane[1])); lst_nmuzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = false; }
+                                        }
+                                        else { muzyczny = true; }
 
-                                        czy_folder test = new czy_folder(find_directory_from_path(dane[1]));
-                                        test.ShowDialog();
-                                        if (test.muzyczny)
-                                        { folderyMuzyczne.Add(find_directory_from_path(dane[1])); lst_muzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = true; }
-                                        else { folderyNiemuzyczne.Add(find_directory_from_path(dane[1])); lst_nmuzyczne.Items.Add(find_directory_from_path(dane[1])); muzyczny = false; }
-                                    }
+                                     }
                                     else { muzyczny = false; }
                                 }
                                 else { muzyczny = false; }
@@ -347,6 +353,18 @@ namespace BogoriaStoart
                 while (!sr.EndOfStream)
                 {
                     dontask.Add(sr.ReadLine());
+                }
+                sr.Close();
+                sr.Dispose();
+            }
+            catch { }
+
+            try
+            {
+                sr = new StreamReader("dontask_muz.config");
+                while (!sr.EndOfStream)
+                {
+                    dontaskmuz.Add(sr.ReadLine());
                 }
                 sr.Close();
                 sr.Dispose();
